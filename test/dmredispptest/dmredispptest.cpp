@@ -59,7 +59,6 @@ main(void) {
     cpp_redis::client client;
 
     client.connect("127.0.0.1", 6379, [&](const std::string& host, std::size_t port, cpp_redis::client::connect_state status) {
-
         DMEVENT_BEGIN
         {
             if (status == cpp_redis::client::connect_state::dropped) {
