@@ -21,5 +21,5 @@ ADD_DEFINITIONS(-DASIO_STANDALONE)
 ModuleInclude("asio" "thirdparty/asio")
 ModuleImport("dmlog" "thirdparty/dmlog")
 
-LibImport("dmevent_module" "src/dmevent_module")
-ExeImport("example" "dmevent_module")
+LibImport("dmevent" "src/dmevent")
+ExeImport("example" "dmevent")
