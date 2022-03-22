@@ -20,7 +20,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/include/dmredispp_config.h.in ${CMAKE
 
 ModuleImportAll("thirdparty")
 LibImport("dmredispp_module" "src/dmredispp_module")
-ExeImport("test" "dmredispp_module")
+ExeImport("test" "dmevent_module;tacopie;cpp_redis")
 
 #ADD_CUSTOM_COMMAND(
 #TARGET dmredispptest
