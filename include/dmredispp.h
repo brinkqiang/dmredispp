@@ -22,18 +22,7 @@
 #ifndef __DMREDISPP_H_INCLUDE__
 #define __DMREDISPP_H_INCLUDE__
 
-#include "dmos.h"
 
-class Idmredispp
-{
-public:
-    virtual ~Idmredispp(){}
-    virtual void DMAPI Release(void) = 0;
-	
-    virtual void DMAPI Test(void) = 0;
-};
 
-Idmredispp* DMAPI dmredisppGetModule();
 
-typedef Idmredispp* (DMAPI* PFN_dmredisppGetModule)();
 #endif // __DMREDISPP_H_INCLUDE__

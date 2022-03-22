@@ -29,8 +29,6 @@
 #endif /* _WIN32 */
 #include "dmevent/dmevent_module.h"
 
-#define POST_BEGIN module->Post([&]()
-#define POST_END )
 
 int
 main(void) {
@@ -45,20 +43,15 @@ main(void) {
     }
 #endif /* _WIN32 */
 
-    std::shared_ptr<Cdmevent_module> module = dmeventGetModule();
-
-    if (module)
+    DMEVENT_INIT();
+    DMEVENT_BEGIN
     {
-        module->Init();
-        POST_BEGIN
-        {
-            fmt::print("---------------------------------------------------------------\n");
-            fmt::print("{} dmevent loop {} ...\n", DMGetExeName(), "running");
-            fmt::print("---------------------------------------------------------------\n");
-        }
-        POST_END;
-
+        fmt::print("---------------------------------------------------------------\n");
+        fmt::print("{} dmevent loop {} ...\n", DMGetExeName(), "running");
+        fmt::print("---------------------------------------------------------------\n");
     }
+    DMEVENT_END;
+
 
     //! Enable logging
     cpp_redis::active_logger = std::unique_ptr<cpp_redis::logger>(new cpp_redis::logger);
@@ -67,46 +60,46 @@ main(void) {
 
     client.connect("127.0.0.1", 6379, [&](const std::string& host, std::size_t port, cpp_redis::client::connect_state status) {
 
-        POST_BEGIN
+        DMEVENT_BEGIN
         {
             if (status == cpp_redis::client::connect_state::dropped) {
                 std::cout << "client disconnected from " << host << ":" << port << std::endl;
             }
         }
-        POST_END;
+        DMEVENT_END;
     });
 
     // same as client.send({ "SET", "hello", "42" }, ...)
     client.set("hello", "42", [&](cpp_redis::reply& reply) {
-        POST_BEGIN
+        DMEVENT_BEGIN
         {
             std::cout << "set hello 42: " << reply << std::endl;
         }
-        POST_END;
+        DMEVENT_END;
     });
 
     // same as client.send({ "DECRBY", "hello", 12 }, ...)
     client.decrby("hello", 12, [&](cpp_redis::reply& reply) {
-        POST_BEGIN
+        DMEVENT_BEGIN
         {
             std::cout << "decrby hello 12: " << reply << std::endl;
         }
-        POST_END;
+        DMEVENT_END;
     });
 
     // same as client.send({ "GET", "hello" }, ...)
     client.get("hello", [&](cpp_redis::reply& reply) {
-        POST_BEGIN
+        DMEVENT_BEGIN
         {
             std::cout << "get hello: " << reply << std::endl;
         }
-        POST_END;
+        DMEVENT_END;
     });
 
     // commands are pipelined and only sent when client.commit() is called
     client.commit();
 
-    module->RunUntil();
+    DMEVENT_RUNUNTIL();
     // synchronous commit, no timeout
     //client.sync_commit();
 

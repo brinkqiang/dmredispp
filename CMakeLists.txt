@@ -16,10 +16,9 @@ SET(DMREDISPP_VERSION "${DMREDISPP_VERSION_MAJOR}.${DMREDISPP_VERSION_MINOR}.${D
 MESSAGE(STATUS "VERSION: ${DMREDISPP_VERSION}")
 
 OPTION(USE_DMREDISPP "use dmredispp" OFF)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/include/dmredispp_config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/include/dmredispp_config.h)
 
 ModuleImportAll("thirdparty")
-LibImport("dmredispp_module" "src/dmredispp_module")
+
 ExeImport("test" "dmevent;tacopie;cpp_redis")
 
 #ADD_CUSTOM_COMMAND(
