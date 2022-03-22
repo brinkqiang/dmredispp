@@ -27,7 +27,7 @@
 #ifdef _WIN32
 #include <Winsock2.h>
 #endif /* _WIN32 */
-#include "dmevent_module/dmevent_module.h"
+#include "dmevent/dmevent_module.h"
 
 #define POST_BEGIN module->Post([&]()
 #define POST_END )
