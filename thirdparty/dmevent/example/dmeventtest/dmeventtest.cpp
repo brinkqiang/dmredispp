@@ -1,9 +1,9 @@
 
 #include "dmevent_module.h"
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
-    std::shared_ptr<Cdmevent_module> module = dmeventGetModule();
+    std::shared_ptr<CDMEventModule> module = dmeventGetModule();
 
     if (module)
     {
