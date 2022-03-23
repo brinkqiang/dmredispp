@@ -27,13 +27,13 @@
 #include "dmutil.h"
 #include "dmformat.h"
 
-class Cdmevent_module :
-    public std::enable_shared_from_this<Cdmevent_module>
+class CDMEventModule :
+    public std::enable_shared_from_this<CDMEventModule>
 {
 public:
-    Cdmevent_module();
+    CDMEventModule();
 
-    virtual ~Cdmevent_module();
+    virtual ~CDMEventModule();
 
     virtual void Init(void);
 
@@ -58,9 +58,9 @@ private:
 };
 
 
-std::shared_ptr<Cdmevent_module> dmeventGetModule();
+std::shared_ptr<CDMEventModule> dmeventGetModule();
 
-static std::shared_ptr<Cdmevent_module> dmevent_module = dmeventGetModule();
+static std::shared_ptr<CDMEventModule> dmevent_module = dmeventGetModule();
 
 #define DMEVENT_INIT() dmevent_module->Init()
 #define DMEVENT_BEGIN dmevent_module->Post([=]()

@@ -21,33 +21,33 @@
 
 #include "dmevent_module.h"
 
-Cdmevent_module::Cdmevent_module()
+CDMEventModule::CDMEventModule()
     : m_io_work(m_io_event), m_signals(m_io_event), m_stop(false)
 {
     m_signals.add(SIGINT);
     m_signals.add(SIGTERM);
-    #if defined(SIGQUIT)
+#if defined(SIGQUIT)
     m_signals.add(SIGQUIT);
-    #endif // defined(SIGQUIT)
+#endif // defined(SIGQUIT)
 
     m_signals.async_wait(
         [this](std::error_code ec, int signo)
-        {
+    {
         fmt::print("---------------------------------------------------------------\n");
         fmt::print("{} dmevent loop {} ...\n", DMGetExeName(), "stopping");
         fmt::print("---------------------------------------------------------------\n");
         m_io_event.stop();
         m_stop = true;
         OnStop();
-        });
+    });
 }
 
-Cdmevent_module::~Cdmevent_module()
+CDMEventModule::~CDMEventModule()
 {
 
 }
 
-void Cdmevent_module::Init(void)
+void CDMEventModule::Init(void)
 {
     auto self(shared_from_this());
     Post([this, self]()
@@ -58,14 +58,14 @@ void Cdmevent_module::Init(void)
     });
 }
 
-bool Cdmevent_module::Run(int event)
+bool CDMEventModule::Run(int event)
 {
     if (0 == m_io_event.poll_one())
     {
         return false;
     }
 
-    for (int i=0; i < event; i++)
+    for (int i = 0; i < event; i++)
     {
         int nEvent = m_io_event.poll_one();
 
@@ -78,12 +78,12 @@ bool Cdmevent_module::Run(int event)
     return true;
 }
 
-void Cdmevent_module::OnStop()
+void CDMEventModule::OnStop()
 {
 
 }
 
-bool Cdmevent_module::RunUntil()
+bool CDMEventModule::RunUntil()
 {
     bool bBusy = false;
     while (!m_stop)
@@ -105,18 +105,18 @@ bool Cdmevent_module::RunUntil()
     return true;
 }
 
-asio::io_context& Cdmevent_module::GetIO()
+asio::io_context& CDMEventModule::GetIO()
 {
     return m_io_event;
 }
 
-std::shared_ptr<Cdmevent_module> dmeventGetModule()
+std::shared_ptr<CDMEventModule> dmeventGetModule()
 {
     static std::once_flag m_oOnce;
-    static std::shared_ptr<Cdmevent_module> module;
+    static std::shared_ptr<CDMEventModule> module;
     std::call_once(m_oOnce, [&]()
     {
-        module = std::make_shared<Cdmevent_module>();
+        module = std::make_shared<CDMEventModule>();
     });
 
     return module;
