@@ -62,6 +62,13 @@ std::shared_ptr<CDMEventModule> dmeventGetModule();
 
 static std::shared_ptr<CDMEventModule> dmevent_module = dmeventGetModule();
 
+static std::thread::id main_id = std::this_thread::get_id();
+
+static inline bool isMain()
+{
+    return main_id == std::this_thread::get_id();
+}
+
 #define DMEVENT_INIT() dmevent_module->Init()
 #define DMEVENT_BEGIN dmevent_module->Post([=]()
 #define DMEVENT_END )
