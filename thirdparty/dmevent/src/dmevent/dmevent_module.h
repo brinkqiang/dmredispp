@@ -21,7 +21,7 @@
 
 #include <memory>
 #include <atomic>
-
+#include <thread>
 #include "asio.hpp"
 
 #include "dmutil.h"
