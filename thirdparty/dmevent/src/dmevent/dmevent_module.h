@@ -71,7 +71,7 @@ static inline bool isMain()
 
 #define DMEVENT_INIT() dmevent_module->Init()
 #define DMEVENT_BEGIN dmevent_module->Post([=]()
-#define DMEVENT_END )
+#define DMEVENT_END );
 
 #define DMEVENT_RUN_UNTIL() dmevent_module->RunUntil()
 #define DMEVENT_RUN(n) dmevent_module->Run(n)
