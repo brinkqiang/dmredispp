@@ -98,7 +98,7 @@ main(void) {
     // commands are pipelined and only sent when client.commit() is called
     client.commit();
 
-    DMEVENT_RUNUNTIL();
+    DMEVENT_RUN_UNTIL();
     // synchronous commit, no timeout
     //client.sync_commit();
 

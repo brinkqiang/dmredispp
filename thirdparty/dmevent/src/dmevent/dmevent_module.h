@@ -66,5 +66,5 @@ static std::shared_ptr<Cdmevent_module> dmevent_module = dmeventGetModule();
 #define DMEVENT_BEGIN dmevent_module->Post([=]()
 #define DMEVENT_END )
 
-#define DMEVENT_RUNUNTIL() dmevent_module->RunUntil()
+#define DMEVENT_RUN_UNTIL() dmevent_module->RunUntil()
 #define DMEVENT_RUN(n) dmevent_module->Run(n)
