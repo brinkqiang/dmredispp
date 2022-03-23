@@ -62,17 +62,18 @@ main(void) {
         DMEVENT_BEGIN
         {
             if (status == cpp_redis::client::connect_state::dropped) {
-                std::cout << "client disconnected from " << host << ":" << port << std::endl;
+                fmt::print("client disconnected from {}:{} isMain:{}\n", host, port, isMain());
             }
         }
         DMEVENT_END;
     });
 
+    int roleid = 0x1234;
     // same as client.send({ "SET", "hello", "42" }, ...)
     client.set("hello", "42", [&](cpp_redis::reply& reply) {
         DMEVENT_BEGIN
         {
-            std::cout << "set hello 42: " << reply << std::endl;
+            fmt::print("set hello 42: {} roleid: {} isMain:{}\n", reply, roleid, isMain());
         }
         DMEVENT_END;
     });
@@ -81,7 +82,7 @@ main(void) {
     client.decrby("hello", 12, [&](cpp_redis::reply& reply) {
         DMEVENT_BEGIN
         {
-            std::cout << "decrby hello 12: " << reply << std::endl;
+            fmt::print("decrby hello 12: {} roleid: {} isMain:{}\n", reply, roleid, isMain());
         }
         DMEVENT_END;
     });
@@ -90,7 +91,7 @@ main(void) {
     client.get("hello", [&](cpp_redis::reply& reply) {
         DMEVENT_BEGIN
         {
-            std::cout << "get hello: " << reply << std::endl;
+            fmt::print("get hello: {} roleid: {} isMain:{}\n", reply, roleid, isMain());
         }
         DMEVENT_END;
     });
