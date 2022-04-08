@@ -28,6 +28,7 @@
 #include <Winsock2.h>
 #endif /* _WIN32 */
 #include "dmevent/dmevent_module.h"
+#include "../luarand/src/dmrand/dmrand.h"
 
 
 int
@@ -68,33 +69,42 @@ main(void) {
         DMEVENT_END;
     });
 
+    // ZRANGEBYSCORE
+    //client.zrangebyscore();
+
     int roleid = 0x1234;
-    // same as client.send({ "SET", "hello", "42" }, ...)
-    client.set("hello", "42", [&](cpp_redis::reply& reply) {
+    for (size_t i = 0; i < 100; i++)
+    {
+        int rand = gDMRand.GetRandRange(1, 100);
+        std::vector<std::string> opt;
+        std::multimap<std::string, std::string> map;
+        auto value = fmt::format("{}{}", "hello", rand);
+        auto key = fmt::format("{}", rand);
+        map.insert(std::make_pair(key, value));
+        client.zadd("hello", opt, map, [=](cpp_redis::reply& reply) {
+            DMEVENT_BEGIN
+            {
+                fmt::print("zadd {} {}: {} roleid: {} isMain:{}\n", fmt::format("{}{}", "hello", rand), fmt::format("{}", rand), reply, roleid, isMain());
+            }
+            DMEVENT_END;
+        });
+    }
+
+    client.zrangebyscore("hello", "50", "60", true, [&](cpp_redis::reply& reply) {
         DMEVENT_BEGIN
         {
-            fmt::print("set hello 42: {} roleid: {} isMain:{}\n", reply, roleid, isMain());
+            if (reply.is_array())
+            {
+                auto arr = reply.as_array();
+                for (auto i = 0; i < reply.as_array().size(); i += 2)
+                {
+                    fmt::print("zrangebyscore : {} {} roleid: {} isMain:{}\n", arr[i], arr[i + 1], roleid, isMain());
+                }
+            }
         }
         DMEVENT_END;
     });
 
-    // same as client.send({ "DECRBY", "hello", 12 }, ...)
-    client.decrby("hello", 12, [&](cpp_redis::reply& reply) {
-        DMEVENT_BEGIN
-        {
-            fmt::print("decrby hello 12: {} roleid: {} isMain:{}\n", reply, roleid, isMain());
-        }
-        DMEVENT_END;
-    });
-
-    // same as client.send({ "GET", "hello" }, ...)
-    client.get("hello", [&](cpp_redis::reply& reply) {
-        DMEVENT_BEGIN
-        {
-            fmt::print("get hello: {} roleid: {} isMain:{}\n", reply, roleid, isMain());
-        }
-        DMEVENT_END;
-    });
 
     // commands are pipelined and only sent when client.commit() is called
     client.commit();
