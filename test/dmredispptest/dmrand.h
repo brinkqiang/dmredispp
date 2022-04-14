@@ -36,12 +36,12 @@ public:
     uint32_t GetRandRange(uint32_t dwMin, uint32_t dwMax);
 
     bool GetRandHit(float op);
-    
+
 private:
     std::random_device RandomDevice;
     std::mt19937 GenerateRand;
 };
 
-
+static CDMRand gDMRand;
 
 #endif // __DMRAND_H_INCLUDE__

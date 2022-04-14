@@ -28,7 +28,7 @@
 #include <Winsock2.h>
 #endif /* _WIN32 */
 #include "dmevent/dmevent_module.h"
-#include "../luarand/src/dmrand/dmrand.h"
+#include "dmrand.h"
 
 
 int
