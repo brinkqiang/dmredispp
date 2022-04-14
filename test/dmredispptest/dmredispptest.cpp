@@ -96,7 +96,7 @@ main(void) {
             if (reply.is_array())
             {
                 auto arr = reply.as_array();
-                for (auto i = 0; i < reply.as_array().size(); i += 2)
+                for (auto i = 0; i < arr.size(); i += 2)
                 {
                     fmt::print("zrangebyscore : {} {} roleid: {} isMain:{}\n", arr[i], arr[i + 1], roleid, isMain());
                 }
