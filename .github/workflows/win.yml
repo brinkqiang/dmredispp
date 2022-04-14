@@ -33,7 +33,7 @@ jobs:
       - name: Build
         working-directory: ${{runner.workspace}}/build
         shell: bash
-        run: cmake --build . --config ${{env.BUILD_TYPE}} -- /m:4
+        run: cmake --build . --config ${{env.BUILD_TYPE}}
 
       - name: Test
         shell: bash
