@@ -33,7 +33,7 @@ jobs:
       - name: Build
         working-directory: ${{runner.workspace}}/build
         shell: bash
-        run: cmake --build . --config ${{env.BUILD_TYPE}}
+        run: cmake --build . --config ${{env.BUILD_TYPE}} -- /m:%NUMBER_OF_PROCESSORS%
 
       - name: Test
         shell: bash
