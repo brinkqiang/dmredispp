@@ -93,7 +93,7 @@ main(void) {
     });
 
     // same as client.send({ "DECRBY", "hello", 12 }, ...)
-    client.decrby("hello", 12, [&](cpp_redis::reply& reply) {
+    client.decrby("hello", 12, [=](cpp_redis::reply& reply) {
         DMEVENT_BEGIN
         {
             fmt::print("decrby hello 12: {} roleid: {} isMain:{}\n", reply, roleid, isMain());
@@ -102,7 +102,7 @@ main(void) {
     });
 
     // same as client.send({ "GET", "hello" }, ...)
-    client.get("hello", [&](cpp_redis::reply& reply) {
+    client.get("hello", [=](cpp_redis::reply& reply) {
         DMEVENT_BEGIN
         {
             fmt::print("get hello: {} roleid: {} isMain:{}\n", reply, roleid, isMain());
@@ -127,7 +127,7 @@ main(void) {
         });
     }
 
-    client.zrangebyscore("hellogroup", "50", "60", true, [&](cpp_redis::reply& reply) {
+    client.zrangebyscore("hellogroup", "50", "60", true, [=](cpp_redis::reply& reply) {
         DMEVENT_BEGIN
         {
             if (reply.is_array())
