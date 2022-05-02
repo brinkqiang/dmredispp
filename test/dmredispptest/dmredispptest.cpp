@@ -73,6 +73,41 @@ main(void) {
     //client.zrangebyscore();
 
     int roleid = 0x1234;
+
+    client.get("hello2345", [&](cpp_redis::reply& reply) {
+        DMEVENT_BEGIN
+        {
+            fmt::print("get hello: {} roleid: {} isMain:{}\n", reply, roleid, isMain());
+        }
+        DMEVENT_END;
+    });
+
+    client.set("hello", "42", [&](cpp_redis::reply& reply) {
+        DMEVENT_BEGIN
+        {
+            fmt::print("set hello 42: {} roleid: {} isMain:{}\n", reply, roleid, isMain());
+        }
+        DMEVENT_END;
+    });
+
+    // same as client.send({ "DECRBY", "hello", 12 }, ...)
+    client.decrby("hello", 12, [&](cpp_redis::reply& reply) {
+        DMEVENT_BEGIN
+        {
+            fmt::print("decrby hello 12: {} roleid: {} isMain:{}\n", reply, roleid, isMain());
+        }
+        DMEVENT_END;
+    });
+
+    // same as client.send({ "GET", "hello" }, ...)
+    client.get("hello", [&](cpp_redis::reply& reply) {
+        DMEVENT_BEGIN
+        {
+            fmt::print("get hello: {} roleid: {} isMain:{}\n", reply, roleid, isMain());
+        }
+        DMEVENT_END;
+    });
+
     for (size_t i = 0; i < 100; i++)
     {
         int rand = gDMRand.GetRandRange(1, 100);
@@ -81,7 +116,7 @@ main(void) {
         auto value = fmt::format("{}{}", "hello", rand);
         auto key = fmt::format("{}", rand);
         map.insert(std::make_pair(key, value));
-        client.zadd("hello", opt, map, [=](cpp_redis::reply& reply) {
+        client.zadd("hellogroup", opt, map, [=](cpp_redis::reply& reply) {
             DMEVENT_BEGIN
             {
                 fmt::print("zadd {} {}: {} roleid: {} isMain:{}\n", fmt::format("{}{}", "hello", rand), fmt::format("{}", rand), reply, roleid, isMain());
@@ -90,7 +125,7 @@ main(void) {
         });
     }
 
-    client.zrangebyscore("hello", "50", "60", true, [&](cpp_redis::reply& reply) {
+    client.zrangebyscore("hellogroup", "50", "60", true, [&](cpp_redis::reply& reply) {
         DMEVENT_BEGIN
         {
             if (reply.is_array())
