@@ -30,6 +30,9 @@
 #include "dmevent/dmevent_module.h"
 #include "dmrand.h"
 
+// 注意client生命周期
+
+cpp_redis::client client;
 
 int
 main(void) {
@@ -57,7 +60,6 @@ main(void) {
     //! Enable logging
     cpp_redis::active_logger = std::unique_ptr<cpp_redis::logger>(new cpp_redis::logger);
 
-    cpp_redis::client client;
 
     client.connect("127.0.0.1", 6379, [&](const std::string& host, std::size_t port, cpp_redis::client::connect_state status) {
         DMEVENT_BEGIN
